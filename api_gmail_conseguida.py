@@ -11,29 +11,24 @@ from datetime import datetime, timedelta
 
 def conexion_gmail_api(SCOPES,client_secret_file):
     creds = None
-  
-    # The file token.pickle contains the user access token. 
-    # Check if it exists 
-    if os.path.exists('token.pickle'): 
-      
-        # Read the token from the file and store it in the variable creds 
-        with open('token.pickle', 'rb') as token: 
-            creds = pickle.load(token) 
-      
-    # If credentials are not available or are invalid, ask the user to log in. 
-    if not creds or not creds.valid: 
-        if creds and creds.expired and creds.refresh_token: 
-            creds.refresh(Request()) 
-        else: 
-            flow = InstalledAppFlow.from_client_secrets_file(client_secret_file, SCOPES) 
-            creds = flow.run_local_server(port=0) 
-      
-        # Save the access token in token.pickle file for the next run 
-        with open('token.pickle', 'wb') as token: 
-            pickle.dump(creds, token) 
-      
-    # Connect to the Gmail API 
-    service = build('gmail', 'v1', credentials=creds) 
+    # El archivo token.pickle almacena los tokens de acceso y actualización del usuario, y se
+    # crea automáticamente cuando el flujo de autorización se completa por primera vez.
+    if os.path.exists('token.pickle'):
+        with open('token.pickle', 'rb') as token:
+            creds = pickle.load(token)
+    # Si no hay credenciales disponibles o son inválidas, pide al usuario que se loguee.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'credentials.json', SCOPES)
+            creds = flow.run_local_server(port=0)
+        # Guarda las credenciales para la próxima ejecución
+        with open('token.pickle', 'wb') as token:
+            pickle.dump(creds, token)
+
+    service = build('gmail', 'v1', credentials=creds)
     return service
 
 service = conexion_gmail_api(SCOPES,client_secret_file)
