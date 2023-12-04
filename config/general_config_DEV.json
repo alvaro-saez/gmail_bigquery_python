@@ -1,0 +1,16 @@
+{
+    "gmail":{
+        "email_user": "alvarosaezsanchez@gmail.com",
+        "email_pass": "eham tafy idvf veby",
+        "email_labels": ["INBOX"],
+        "imap4_sll_type": "imap.gmail.com",
+        "download_path" : "./files",
+        "email_sender": "alvarosaezsanchez@gmail.com",
+        "email_subject": "test gmail excel",
+        "email_attached_file": "GEO_IP_1_comb (1).xlsx",
+        "email_query_timedelta_days": 10
+    },
+    "bigquery":{
+        "nHistData": 365
+    }
+}
