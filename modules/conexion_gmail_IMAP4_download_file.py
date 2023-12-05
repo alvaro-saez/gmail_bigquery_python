@@ -9,8 +9,6 @@ import json
 from google.cloud import secretmanager
 from google.oauth2.service_account import Credentials
 
-
-
 # variables de configuración
 config_env = open('../config/general_config_environments.json')
 config_env = json.load(config_env)
@@ -19,10 +17,12 @@ env = config_env['general']['config_env']
 config_file = open('../config/general_config_' + env + '.json')
 config_file = json.load(config_file)
 ## gmail
-#email_user = config_file['gmail']['email_user']
-#email_pass = config_file['gmail']['email_pass']
+#email_user = config_file['gmail']['email_user'] #la obtendremos del secret manager
+#email_pass = config_file['gmail']['email_pass'] #la obtendremos del secret manager
 imap4_sll_type = config_file['gmail']['imap4_sll_type']
 download_path = config_file['gmail']['download_path']
+
+#variables secret manager
 project_id = config_file['bigquery']['project_id']
 secret_id_pass = config_file['secretmanager']['gmail_pass']
 secret_id_name = config_file['secretmanager']['gmail_account']
@@ -53,7 +53,7 @@ def get_secret(project_id, secret_id, credentials_path, version_id="latest"):
         return None
     
 email_user = get_secret(project_id, secret_id_name, credentials_path, version_id="latest")
-email_pass = get_secret(project_id, secret_id_name, credentials_path, version_id="latest")
+email_pass = get_secret(project_id, secret_id_pass, credentials_path, version_id="latest")
 
 
 # Conexión al servidor IMAP de Gmail y la cuenta de gmail
