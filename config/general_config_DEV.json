@@ -4,13 +4,19 @@
         "email_pass": "eham tafy idvf veby",
         "email_labels": ["INBOX"],
         "imap4_sll_type": "imap.gmail.com",
-        "download_path" : "./files",
+        "download_path" : "../files",
         "email_sender": "alvarosaezsanchez@gmail.com",
         "email_subject": "test gmail excel",
         "email_attached_file": "GEO_IP_1_comb (1).xlsx",
         "email_query_timedelta_days": 10
     },
     "bigquery":{
-        "nHistData": 365
+        "scopes": ["https://www.googleapis.com/auth/cloud-platform"],
+        "bq_credentials": "../credenciales/client_secret_python_bq.json",
+        "project_id": "curso-bigquery-mide-403114",
+        "dataset_id": "chicago_taxi_tips",
+        "table_id": "cars_upload_test",
+        "csv_path": "../files/cars.csv",
+        "insert_method": "replace"
     }
 }
