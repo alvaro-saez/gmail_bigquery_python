@@ -18,5 +18,10 @@
         "table_id": "cars_upload_test",
         "csv_path": "../files/cars.csv",
         "insert_method": "replace"
+    },
+    "secretmanager":{
+        "gmail_pass": "gmail_pass",
+        "gmail_account": "gmail_account"
     }
+    
 }

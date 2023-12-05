@@ -79,7 +79,10 @@ def bq_client(scopes, bq_credentials, project_id):
         client = bigquery.Client(credentials=credentials, project=credentials.project_id)
         return client
     except Exception as e:
-        print("Big query conection wrong: " + str(e))
+        print("Big query local conection wrong: " + str(e) + " try virtual conexion")
+        #La VM tiene que tener los permisos adecuados --> dárselos como user o descargando el archivo JSON de la cuenta de servicio y colocándolo en la VM (export GOOGLE_APPLICATION_CREDENTIALS="/ruta/a/tu/credencial.json")
+        client = bigquery.Client()
+        return client
 
 client = bq_client(scopes, bq_credentials, project_id)
 

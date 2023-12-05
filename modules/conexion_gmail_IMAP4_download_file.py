@@ -6,6 +6,9 @@ import os
 from datetime import datetime, timedelta
 import re
 import json
+from google.cloud import secretmanager
+from google.oauth2.service_account import Credentials
+
 
 
 # variables de configuración
@@ -16,10 +19,14 @@ env = config_env['general']['config_env']
 config_file = open('../config/general_config_' + env + '.json')
 config_file = json.load(config_file)
 ## gmail
-email_user = config_file['gmail']['email_user']
-email_pass = config_file['gmail']['email_pass']
+#email_user = config_file['gmail']['email_user']
+#email_pass = config_file['gmail']['email_pass']
 imap4_sll_type = config_file['gmail']['imap4_sll_type']
 download_path = config_file['gmail']['download_path']
+project_id = config_file['bigquery']['project_id']
+secret_id_pass = config_file['secretmanager']['gmail_pass']
+secret_id_name = config_file['secretmanager']['gmail_account']
+credentials_path = config_file['bigquery']['bq_credentials']
 
 ##variables de búsqueda de gmail
 email_labels = config_file['gmail']['email_labels']
@@ -29,6 +36,24 @@ date_since_range = (datetime.now() - timedelta(days=email_query_timedelta_days))
 date_today = datetime.now().strftime("%d-%b-%Y")
 email_subject = config_file['gmail']['email_subject']
 email_attached_file = config_file['gmail']['email_attached_file']
+
+#conexión al secret manager
+def get_secret(project_id, secret_id, credentials_path, version_id="latest"):
+    try:
+        creds = Credentials.from_service_account_file(credentials_path)
+        client = secretmanager.SecretManagerServiceClient(credentials = creds)
+    except FileNotFoundError:
+        client = secretmanager.SecretManagerServiceClient()
+    secret_name_chosen = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
+    try:
+        response = client.access_secret_version(name=secret_name_chosen)
+        return response.payload.data.decode('UTF-8')
+    except Exception as e:
+        print('SecretManager Error: ' + e)
+        return None
+    
+email_user = get_secret(project_id, secret_id_name, credentials_path, version_id="latest")
+email_pass = get_secret(project_id, secret_id_name, credentials_path, version_id="latest")
 
 
 # Conexión al servidor IMAP de Gmail y la cuenta de gmail
